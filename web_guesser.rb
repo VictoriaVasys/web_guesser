@@ -1,29 +1,37 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
-SECRET_NUMBER = rand(100)
+@@secret_number = rand(100)
+@@guesses_left = 5
 
 def check_guess(guess)
-  if guess > (SECRET_NUMBER + 5)
+  @@guesses_left -= 1
+  if @@guesses_left == 0
+    @@secret_number = rand(100)
+    @@guesses_left = 5
+    "Sorry, but you've lost! A new secret number has now been generated."
+  elsif guess > (@@secret_number + 5)
     @background_color = "red"
     "Way too high!"
-  elsif guess > SECRET_NUMBER
+  elsif guess > @@secret_number
     @background_color = "#ffcccc"
     "Too high!"
-  elsif guess < (SECRET_NUMBER - 5)
+  elsif guess < (@@secret_number - 5)
     @background_color = "red"
     "Way too low!"
-  elsif guess < SECRET_NUMBER
+  elsif guess < @@secret_number
     @background_color = "#ffcccc"
     "Too low!"
-  elsif guess == SECRET_NUMBER
+  elsif guess == @@secret_number
     @background_color = "green"
-    "You got it right!"
+    @@secret_number = rand(100)
+    @@guesses_left = 5
+    "You got it right! Guess again if you dare. muhahahha"
   end
 end
 
 get '/' do
   guess = params["guess"].to_i
   message = check_guess(guess)
-  erb :index, :locals => {:number => SECRET_NUMBER, :message => message, :guess => guess, :background_color => @background_color}
+  erb :index, :locals => {:number => @@secret_number, :message => message, :guess => guess, :background_color => @background_color}
 end
