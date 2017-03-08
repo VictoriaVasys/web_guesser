@@ -14,9 +14,9 @@
       </form>
       <%= message %>
     </p>
-    <% if guess == number %>
+    <% if guess == number || cheat == "true" %>
       <p>
-        The SECRET NUMBER is <%= SECRET_NUMBER %>
+        The SECRET NUMBER is <%= number %>
       </p>
     <% end %>
   </body>

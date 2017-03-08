@@ -32,6 +32,7 @@ end
 
 get '/' do
   guess = params["guess"].to_i
+  cheat = params["cheat"]
   message = check_guess(guess)
-  erb :index, :locals => {:number => @@secret_number, :message => message, :guess => guess, :background_color => @background_color}
+  erb :index, :locals => {:number => @@secret_number, :message => message, :guess => guess, :background_color => @background_color, :cheat => cheat}
 end
